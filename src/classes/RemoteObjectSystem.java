@@ -5,9 +5,10 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 
 import org.jgroups.JChannel;
+import org.jgroups.Message;
 
-import examples.Character;
-import examples.StringRemoteData;
+import classes.commands.RPCCommand;
+
 import interfaces.IRemotableObject;
 
 public class RemoteObjectSystem {
@@ -20,6 +21,13 @@ public class RemoteObjectSystem {
 		this.channel = channel;
 		name = systemName;
 		remotableObjects = new HashMap<String, IRemotableObject>();
+		
+		System.out.println("Launching JGroups receiver Thread...");
+		Runnable  r = new JGroupsThread(channel);
+		Thread t = new Thread(r);
+		t.start();
+		System.out.println("OK");
+		
 	}
 
 	public void CallRemoteObjectMethod(String remoteObjectName, String methodName, RemoteCallData rcd) throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
@@ -29,7 +37,11 @@ public class RemoteObjectSystem {
 		Method m = o.getClass().getDeclaredMethod(methodName, RemoteCallData.class);
 		m.invoke(o, rcd);
 		
+		RPCCommand c = new RPCCommand(remoteObjectName, methodName, rcd);
+		
 		// Then we send CALL commands to all JGroups members
+		Message mess = new Message(null, null, c);
+		
 		
 	}
 

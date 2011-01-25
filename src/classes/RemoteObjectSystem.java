@@ -11,6 +11,7 @@ import org.jgroups.JChannel;
 import org.jgroups.Message;
 
 import classes.commands.Command;
+import classes.commands.CreateObjectCommand;
 import classes.commands.RPCCommand;
 
 import interfaces.IRemotableObject;
@@ -61,11 +62,14 @@ public class RemoteObjectSystem {
 
 
 	public void createRemoteObject(IRemotableObject o, String objectName) {
-		remotableObjects.put(objectName, o);
-		
+		this.addNewRemotableObject(o,objectName);
+	}
+	
+	public void addNewRemotableObject( IRemotableObject o, String name){
+		remotableObjects.put(name, o);
 	}
 
-	public void parseCommand(Command c) throws SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+	public void parseCommand(Command c) throws SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, ClassNotFoundException, InstantiationException {
 		
 		if (c == null)
 			return;
@@ -75,6 +79,21 @@ public class RemoteObjectSystem {
 			CallLocalMethod(rpc.getObjectName(), rpc.getMethodName(), rpc.getRemoteCallData());
 		}
 		
+		if (c.getIsCreateObject()) {
+			CreateObjectCommand object = (CreateObjectCommand)c;
+			Class cl = Class.forName(object.getClassName());
+			java.lang.reflect.Constructor co = cl.getConstructor();
+			IRemotableObject remotableObject = (IRemotableObject) co.newInstance();
+			this.addNewRemotableObject( remotableObject, object.getObjectName());
+		}
+		
+		if (c.getIsDeleteObject()) {
+			
+		}
+		
+		if (c.getIsUpdateObject()) {
+			
+		}
 	}
 
 }

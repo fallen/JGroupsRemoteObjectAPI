@@ -3,7 +3,7 @@ package classes.commands;
 import interfaces.IRemotableObject;
 import classes.RemoteCallData;
 
-public class UpdateObject extends Command{
+public class UpdateObjectCommand extends Command{
 	
 	/**
 	 * 
@@ -12,7 +12,7 @@ public class UpdateObject extends Command{
 	private IRemotableObject object;
 	private String objectName;
 	
-	public UpdateObject(IRemotableObject object, String objectName)
+	public UpdateObjectCommand(IRemotableObject object, String objectName)
 	{
 		this.object = object;
 		this.objectName = objectName;

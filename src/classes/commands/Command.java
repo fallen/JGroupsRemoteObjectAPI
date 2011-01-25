@@ -1,6 +1,12 @@
 package classes.commands;
 
-public abstract class Command {
+import java.io.Serializable;
+
+public abstract class Command implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -858244501261760484L;
 	public Boolean getIsRPC() {
 		return isRPC;
 	}

@@ -4,6 +4,10 @@ import classes.RemoteCallData;
 
 public class RPCCommand extends Command {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5158774263437377537L;
 	private String objectName;
 	private String methodName;
 	private RemoteCallData arg;

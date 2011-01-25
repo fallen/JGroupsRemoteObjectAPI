@@ -4,6 +4,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 
+import org.jgroups.Address;
+import org.jgroups.ChannelClosedException;
+import org.jgroups.ChannelNotConnectedException;
 import org.jgroups.JChannel;
 import org.jgroups.Message;
 
@@ -30,7 +33,7 @@ public class RemoteObjectSystem {
 		
 	}
 
-	public void CallRemoteObjectMethod(String remoteObjectName, String methodName, RemoteCallData rcd) throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+	public void CallRemoteObjectMethod(String remoteObjectName, String methodName, RemoteCallData rcd) throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, ChannelNotConnectedException, ChannelClosedException {
 		IRemotableObject o = remotableObjects.get(remoteObjectName);
 		
 		// Now we call the method on our local Object
@@ -41,7 +44,7 @@ public class RemoteObjectSystem {
 		
 		// Then we send CALL commands to all JGroups members
 		Message mess = new Message(null, null, c);
-		
+		channel.send(mess);
 		
 	}
 

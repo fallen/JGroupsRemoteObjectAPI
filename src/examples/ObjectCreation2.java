@@ -43,6 +43,8 @@ public class ObjectCreation2 {
 			
 		}
 		
+		OSystem.stoppedThread();
+		
 	}
 
 }

@@ -1,5 +1,6 @@
 package examples;
 
+import classes.RemoteCallData;
 import interfaces.IRemotableObject;
 
 public class Character implements IRemotableObject {
@@ -23,6 +24,11 @@ public class Character implements IRemotableObject {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public void setName(RemoteCallData rcd) {
+		StringRemoteData srd = (StringRemoteData)rcd;
+		this.name = srd.getData();
 	}
 
 	public String getName() {

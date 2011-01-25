@@ -22,17 +22,14 @@ public class RemoteObjectSystem {
 		remotableObjects = new HashMap<String, IRemotableObject>();
 	}
 
-	public void CallRemoteObjectMethod(String remoteObjectName, String methodName, StringRemoteData srd) throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+	public void CallRemoteObjectMethod(String remoteObjectName, String methodName, RemoteCallData rcd) throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 		IRemotableObject o = remotableObjects.get(remoteObjectName);
 		
 		// Now we call the method on our local Object
-		Method m = o.getClass().getDeclaredMethod(methodName, StringRemoteData.class);
-		if (m == null) {
-			System.out.println("Error : m == null");
-			return;
-		}
+		Method m = o.getClass().getDeclaredMethod(methodName, RemoteCallData.class);
+		m.invoke(o, rcd);
 		
-		m.invoke(srd);
+		// Then we send CALL commands to all JGroups members
 		
 	}
 

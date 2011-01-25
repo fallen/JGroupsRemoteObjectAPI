@@ -20,14 +20,14 @@ public class ObjectCreation1 {
 	 * @throws IllegalArgumentException 
 	 */
 	public static void main(String[] args) throws ChannelException, InterruptedException, SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-		// TODO Auto-generated method stub
+		
 		
 		JChannel channel = new JChannel("udp.xml");
 		channel.connect("test");
 		
 		RemoteObjectSystem OSystem = new RemoteObjectSystem("TestSystem", channel);
 		
-		Thread.sleep(2000);
+		//Thread.sleep(2000);
 		
 		Character c = new Character("Toto");
 		

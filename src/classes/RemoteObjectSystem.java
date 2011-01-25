@@ -12,7 +12,9 @@ import org.jgroups.Message;
 
 import classes.commands.Command;
 import classes.commands.CreateObjectCommand;
+import classes.commands.DeleteObjectCommand;
 import classes.commands.RPCCommand;
+import classes.commands.UpdateObjectCommand;
 
 import interfaces.IRemotableObject;
 
@@ -68,6 +70,17 @@ public class RemoteObjectSystem {
 	public void addNewRemotableObject( IRemotableObject o, String name){
 		remotableObjects.put(name, o);
 	}
+	
+	public void delRemotableObject(String name)
+	{
+		this.remotableObjects.remove(name);
+	}
+	
+	public void updateRemotableObject(IRemotableObject o, String name)
+	{
+		this.remotableObjects.remove(name);
+		this.remotableObjects.put(name, o);
+	}
 
 	public void parseCommand(Command c) throws SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, ClassNotFoundException, InstantiationException {
 		
@@ -88,11 +101,13 @@ public class RemoteObjectSystem {
 		}
 		
 		if (c.getIsDeleteObject()) {
-			
+			DeleteObjectCommand object = (DeleteObjectCommand)c;
+			this.delRemotableObject(object.getObjectName());
 		}
 		
 		if (c.getIsUpdateObject()) {
-			
+			UpdateObjectCommand object = (UpdateObjectCommand)c;
+			this.updateRemotableObject(object.getObject(), object.getObjectName());
 		}
 	}
 

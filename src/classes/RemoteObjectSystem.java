@@ -29,6 +29,8 @@ public class RemoteObjectSystem {
 	private HashMap<String, IRemotableObject> remotableObjects;
 	private Boolean waitingForAnswer = Boolean.valueOf(false);
 	private Long blockedThread = new Long(Thread.currentThread().getId());
+	JGroupsThread  r;
+
 	
 	public RemoteObjectSystem(String systemName, JChannel channel) {
 		this.channel = channel;
@@ -36,10 +38,15 @@ public class RemoteObjectSystem {
 		remotableObjects = new HashMap<String, IRemotableObject>();
 		
 		System.out.println("Launching JGroups receiver Thread...");
-		Runnable  r = new JGroupsThread(channel, this);
+		r = new JGroupsThread(channel, this);
 		Thread t = new Thread(r);
 		t.start();
 		System.out.println("OK");
+	}
+	
+	public void stoppedThread()
+	{
+		this.r.stop();
 	}
 	
 	public HashMap<String, IRemotableObject> getRemotableObjects() 

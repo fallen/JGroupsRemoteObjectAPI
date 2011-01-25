@@ -61,6 +61,11 @@ public class JGroupsThread extends ReceiverAdapter implements Runnable  {
 		}
         
     }
+    
+    public void stop()
+    {
+    	this.stopped = true;
+    }
 	
     public void viewAccepted(View new_view) {
         System.out.println("** view: " + new_view);

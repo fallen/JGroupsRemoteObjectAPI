@@ -1,5 +1,7 @@
 package examples;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.jgroups.ChannelException;
 import org.jgroups.JChannel;
 
@@ -11,8 +13,13 @@ public class ObjectCreation1 {
 	 * @param args
 	 * @throws ChannelException 
 	 * @throws InterruptedException 
+	 * @throws NoSuchMethodException 
+	 * @throws SecurityException 
+	 * @throws InvocationTargetException 
+	 * @throws IllegalAccessException 
+	 * @throws IllegalArgumentException 
 	 */
-	public static void main(String[] args) throws ChannelException, InterruptedException {
+	public static void main(String[] args) throws ChannelException, InterruptedException, SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 		// TODO Auto-generated method stub
 		
 		JChannel channel = new JChannel("udp.xml");

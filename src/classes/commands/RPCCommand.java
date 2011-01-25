@@ -14,8 +14,10 @@ public class RPCCommand extends Command {
 	
 	public RPCCommand(String remoteObjectName, String methodName2,
 			RemoteCallData rcd) {
+		super();
 		objectName = remoteObjectName;
 		methodName = methodName2;
+		remoteCallData = rcd;
 		this.setIsRPC(true);
 	}
 	

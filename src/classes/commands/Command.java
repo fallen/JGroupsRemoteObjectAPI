@@ -7,6 +7,14 @@ public abstract class Command implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -858244501261760484L;
+	
+	protected Command() {
+		isRPC = new Boolean(false);
+		isUpdateObject = new Boolean(false);
+		isCreateObject = new Boolean(false);
+		isDeleteObject = new Boolean(false);
+	}
+	
 	public Boolean getIsRPC() {
 		return isRPC;
 	}

@@ -10,6 +10,7 @@ public class DeleteObjectCommand extends Command{
 	
 	public DeleteObjectCommand(String object)
 	{
+		super();
 		this.objectName = object;
 		this.setIsUpdateObject(true);
 	}

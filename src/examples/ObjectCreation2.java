@@ -22,22 +22,25 @@ public class ObjectCreation2 {
 	public static void main(String[] args) throws ChannelException, InterruptedException, SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		
 		JChannel channel = new JChannel("udp.xml");
+		int i;
+		
 		channel.connect("test");
+
 		
 		RemoteObjectSystem OSystem = new RemoteObjectSystem("TestSystem", channel);
 		
-		Thread.sleep(5000);
+		Thread.sleep(2000);
 		
-		Character c = (Character)OSystem.getRemoteObject("Toto1");
+		for (i = 0 ; i < 20 ; i++) {
+			
+			Character c = (Character)OSystem.getRemoteObject("Toto1");
+			
+			System.out.println("Character Name : " + c.getName());
+			
+			Thread.sleep(500);
+			
+		}
 		
-		System.out.println("Character c Name : " + c.getName());
-		
-		Thread.sleep(7000);
-		
-		Character c2 = (Character)OSystem.getRemoteObject("Toto1");
-		
-		System.out.println("Character c2 Name : " + c2.getName());
-
 	}
 
 }

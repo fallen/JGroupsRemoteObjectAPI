@@ -35,7 +35,7 @@ public class ObjectCreation1 {
 		
 		c.setName("Paul");
 		
-		Thread.sleep(7000);
+		Thread.sleep(5000);
 		
 		StringRemoteData srd = new StringRemoteData("Paul2");
 		
@@ -43,10 +43,11 @@ public class ObjectCreation1 {
 		
 		System.out.println("Character c Name : " + c.getName());
 		
-		Character c2 = (Character) OSystem.getRemoteObject("Toto1");
+		Thread.sleep(2000);
 		
-		System.out.println("Character c Name : " + c.getName());
-		System.out.println("Character c2 Name : " + c2.getName());
+		c.setName("Titi");
+		
+		OSystem.updateRemotableObject( c.getObjectName() );
 		
 	}
 

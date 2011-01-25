@@ -14,6 +14,7 @@ public class UpdateObjectCommand extends Command{
 	
 	public UpdateObjectCommand(IRemotableObject object, String objectName)
 	{
+		super();
 		this.object = object;
 		this.objectName = objectName;
 		this.setIsUpdateObject(true);

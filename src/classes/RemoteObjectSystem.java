@@ -56,6 +56,11 @@ public class RemoteObjectSystem {
 	public void CallLocalMethod(String objectName, String methodName, RemoteCallData rcd) throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 		IRemotableObject o = remotableObjects.get(objectName);
 		
+		if (o == null) {
+			System.out.println("Error object " + objectName + " not found !");
+			return;
+		}
+		
 		// Now we call the method on our local Object
 		Method m = o.getClass().getDeclaredMethod(methodName, RemoteCallData.class);
 		m.invoke(o, rcd);
@@ -68,13 +73,15 @@ public class RemoteObjectSystem {
 
 	public void createRemoteObject(IRemotableObject o, String objectName) throws ChannelNotConnectedException, ChannelClosedException {
 		this.addNewRemotableObject(o,objectName);
+		o.setObjectName(objectName);
 		
-		CreateObjectCommand c = new CreateObjectCommand(o.getObjectName(), o.getClass().toString());
-		
+		CreateObjectCommand c = new CreateObjectCommand(objectName, o.getClass().getName());
 		Message mess = new Message(null, null, c);
-		
 		channel.send(mess);
 		
+		UpdateObjectCommand c2 = new UpdateObjectCommand(o, objectName);
+		mess = new Message(null, null, c2);
+		channel.send(mess);
 	}
 	
 	public void addNewRemotableObject( IRemotableObject o, String name){
@@ -121,25 +128,21 @@ public class RemoteObjectSystem {
 		if (c.getIsRPC()) {
 			RPCCommand rpc = (RPCCommand)c;
 			CallLocalMethod(rpc.getObjectName(), rpc.getMethodName(), rpc.getRemoteCallData());
-		}
-		
-		if (c.getIsCreateObject()) {
+		} else if (c.getIsCreateObject()) {
 			CreateObjectCommand object = (CreateObjectCommand)c;
+			System.out.println("We are searching for Class : " + object.getClassName());
 			Class cl = Class.forName(object.getClassName());
 			java.lang.reflect.Constructor co = cl.getConstructor();
 			IRemotableObject remotableObject = (IRemotableObject) co.newInstance();
 			addNewRemotableObject( remotableObject, object.getObjectName());
-		}
-		
-		if (c.getIsDeleteObject()) {
+		} else if (c.getIsDeleteObject()) {
 			DeleteObjectCommand object = (DeleteObjectCommand)c;
 			deleteLocalObject(object.getObjectName());
-		}
-		
-		if (c.getIsUpdateObject()) {
+		} else if (c.getIsUpdateObject()) {
 			UpdateObjectCommand object = (UpdateObjectCommand)c;
 			updateLocalObject(object.getObject(), object.getObjectName());
-		}
+		} else 
+			System.out.println("Error Command unknown !!");
 	}
 
 }

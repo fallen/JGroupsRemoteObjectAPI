@@ -11,6 +11,7 @@ public class CreateObjectCommand extends Command{
 	
 	public CreateObjectCommand(String objectName,String className)
 	{
+		super();
 		this.objectName = objectName;
 		this.className = className;
 		this.setIsCreateObject(true);
@@ -30,6 +31,10 @@ public class CreateObjectCommand extends Command{
 
 	public void setClassName(String className) {
 		this.className = className;
+	}
+	
+	public String toString() {
+		return "Create Object Command : objectName : " + objectName + " className : " + className;
 	}
 
 	

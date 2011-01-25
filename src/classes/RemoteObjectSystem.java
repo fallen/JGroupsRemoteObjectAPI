@@ -57,8 +57,7 @@ public class RemoteObjectSystem {
 	}
 
 	public IRemotableObject getRemoteObject(String string) {
-		// TODO Auto-generated method stub
-		return null;
+		return remotableObjects.get(string);
 	}
 
 

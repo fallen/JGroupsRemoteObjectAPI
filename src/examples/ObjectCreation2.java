@@ -30,11 +30,13 @@ public class ObjectCreation2 {
 		
 		Character c = (Character)OSystem.getRemoteObject("Toto1");
 		
-		StringRemoteData srd = new StringRemoteData(null);
+		System.out.println("Character c Name : " + c.getName());
 		
-		OSystem.CallRemoteObjectMethod("Toto1", "getName", srd);
+		Thread.sleep(7000);
 		
-		System.out.println("Le nom de l'objet Toto1 est : "+c.getName()+" en utilisant la méthode getRemoteObject");
+		Character c2 = (Character)OSystem.getRemoteObject("Toto1");
+		
+		System.out.println("Character c2 Name : " + c2.getName());
 
 	}
 

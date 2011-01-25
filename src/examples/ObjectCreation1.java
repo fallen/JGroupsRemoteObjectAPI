@@ -27,23 +27,26 @@ public class ObjectCreation1 {
 		
 		RemoteObjectSystem OSystem = new RemoteObjectSystem("TestSystem", channel);
 		
-		Thread.sleep(2000);
-		
 		Character c = new Character("Toto");
 		
 		OSystem.createRemoteObject(c, "Toto1");
 		
-		System.out.println("Character Name : " + c.getName());
+		System.out.println("Character c Name : " + c.getName());
 		
 		c.setName("Paul");
+		
+		Thread.sleep(7000);
 		
 		StringRemoteData srd = new StringRemoteData("Paul2");
 		
 		OSystem.CallRemoteObjectMethod("Toto1", "setName", srd);
 		
+		System.out.println("Character c Name : " + c.getName());
+		
 		Character c2 = (Character) OSystem.getRemoteObject("Toto1");
 		
-		
+		System.out.println("Character c Name : " + c.getName());
+		System.out.println("Character c2 Name : " + c2.getName());
 		
 	}
 

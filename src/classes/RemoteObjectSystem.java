@@ -126,21 +126,29 @@ public class RemoteObjectSystem {
 			return;
 		
 		if (c.getIsRPC()) {
+			
 			RPCCommand rpc = (RPCCommand)c;
 			CallLocalMethod(rpc.getObjectName(), rpc.getMethodName(), rpc.getRemoteCallData());
+			
 		} else if (c.getIsCreateObject()) {
+			
 			CreateObjectCommand object = (CreateObjectCommand)c;
 			System.out.println("We are searching for Class : " + object.getClassName());
-			Class cl = Class.forName(object.getClassName());
+			Class<?> cl = Class.forName(object.getClassName());
 			java.lang.reflect.Constructor co = cl.getConstructor();
 			IRemotableObject remotableObject = (IRemotableObject) co.newInstance();
 			addNewRemotableObject( remotableObject, object.getObjectName());
+			
 		} else if (c.getIsDeleteObject()) {
+			
 			DeleteObjectCommand object = (DeleteObjectCommand)c;
 			deleteLocalObject(object.getObjectName());
+			
 		} else if (c.getIsUpdateObject()) {
+			
 			UpdateObjectCommand object = (UpdateObjectCommand)c;
 			updateLocalObject(object.getObject(), object.getObjectName());
+			
 		} else 
 			System.out.println("Error Command unknown !!");
 	}

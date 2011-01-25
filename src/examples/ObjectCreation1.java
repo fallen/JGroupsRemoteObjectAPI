@@ -27,7 +27,7 @@ public class ObjectCreation1 {
 		
 		RemoteObjectSystem OSystem = new RemoteObjectSystem("TestSystem", channel);
 		
-		//Thread.sleep(2000);
+		Thread.sleep(2000);
 		
 		Character c = new Character("Toto");
 		

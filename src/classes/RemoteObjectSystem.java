@@ -61,8 +61,15 @@ public class RemoteObjectSystem {
 	}
 
 
-	public void createRemoteObject(IRemotableObject o, String objectName) {
+	public void createRemoteObject(IRemotableObject o, String objectName) throws ChannelNotConnectedException, ChannelClosedException {
 		this.addNewRemotableObject(o,objectName);
+		
+		CreateObjectCommand c = new CreateObjectCommand(o.getObjectName(), o.getClass().toString());
+		
+		Message mess = new Message(null, null, c);
+		
+		channel.send(mess);
+		
 	}
 	
 	public void addNewRemotableObject( IRemotableObject o, String name){

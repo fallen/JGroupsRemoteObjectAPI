@@ -1,6 +1,6 @@
 package interfaces;
 
-public interface IRemotableObject {
+public interface IRemotableObject extends java.io.Serializable {
 
 	public String getObjectName();
 	

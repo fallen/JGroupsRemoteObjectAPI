@@ -34,9 +34,11 @@ public class ObjectCreation2 {
 		for (i = 0 ; i < 20 ; i++) {
 			
 			Character c = (Character)OSystem.getRemoteObject("Toto1");
-			
-			System.out.println("Character Name : " + c.getName());
-			
+			if( c != null)
+			{
+				System.out.println("Character Name : " + c.getName());
+			}
+				
 			Thread.sleep(500);
 			
 		}

@@ -2,13 +2,17 @@ package classes.commands;
 
 public class CreateObject extends Command{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1764970717744482926L;
 	private String objectName;
 	private String className;
 	
-	public CreateObject(String objectname,String classname)
+	public CreateObject(String objectName,String className)
 	{
-		this.objectName = objectname;
-		this.className = classname;
+		this.objectName = objectName;
+		this.className = className;
 		this.setIsCreateObject(true);
 	}
 

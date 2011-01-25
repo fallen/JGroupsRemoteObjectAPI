@@ -5,13 +5,17 @@ import classes.RemoteCallData;
 
 public class UpdateObject extends Command{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 468303898796460946L;
 	private IRemotableObject object;
 	private String objectName;
 	
-	public UpdateObject(IRemotableObject object, String objectname)
+	public UpdateObject(IRemotableObject object, String objectName)
 	{
 		this.object = object;
-		this.objectName = objectname;
+		this.objectName = objectName;
 		this.setIsUpdateObject(true);
 	}
 

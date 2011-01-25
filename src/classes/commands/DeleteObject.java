@@ -2,13 +2,17 @@ package classes.commands;
 
 public class DeleteObject extends Command{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1137173305761692866L;
 	private String objectName;
 	private String className;
 	
-	public DeleteObject(String object, String classname)
+	public DeleteObject(String object, String className)
 	{
 		this.objectName = object;
-		this.className = classname;
+		this.className = className;
 		this.setIsUpdateObject(true);
 	}
 

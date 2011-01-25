@@ -10,7 +10,7 @@ public class RPCCommand extends Command {
 	private static final long serialVersionUID = -5158774263437377537L;
 	private String objectName;
 	private String methodName;
-	private RemoteCallData arg;
+	private RemoteCallData remoteCallData;
 	
 	public RPCCommand(String remoteObjectName, String methodName2,
 			RemoteCallData rcd) {
@@ -31,13 +31,17 @@ public class RPCCommand extends Command {
 	public String getMethodName() {
 		return methodName;
 	}
-	public void setArg(RemoteCallData arg) {
-		this.arg = arg;
-	}
-	public RemoteCallData getArg() {
-		return arg;
-	}
 	
-	
+	public String toString() {
+		return "Obj Name : " + objectName + " methodName : " + methodName;
+	}
+
+	public void setRemoteCallData(RemoteCallData remoteCallData) {
+		this.remoteCallData = remoteCallData;
+	}
+
+	public RemoteCallData getRemoteCallData() {
+		return remoteCallData;
+	}
 	
 }

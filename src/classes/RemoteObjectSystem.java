@@ -4,7 +4,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 
-import org.jgroups.Address;
 import org.jgroups.ChannelClosedException;
 import org.jgroups.ChannelNotConnectedException;
 import org.jgroups.JChannel;
@@ -78,13 +77,34 @@ public class RemoteObjectSystem {
 		remotableObjects.put(name, o);
 	}
 	
-	public void delRemotableObject(String name)
+	public void deleteRemotableObject(String name) throws ChannelNotConnectedException, ChannelClosedException
 	{
-		this.remotableObjects.remove(name);
+		deleteLocalObject(name);
+		
+		DeleteObjectCommand c = new DeleteObjectCommand(name);
+		
+		Message mess = new Message(null, null, c);
+		
+		channel.send(mess);
 	}
 	
-	public void updateRemotableObject(IRemotableObject o, String name)
-	{
+	public void deleteLocalObject(String name) {
+		remotableObjects.remove(name);
+	}
+	
+	public void updateRemotableObject(String name) throws ChannelNotConnectedException, ChannelClosedException {
+		IRemotableObject o = remotableObjects.get(name);
+		updateLocalObject(o, name);
+		
+		UpdateObjectCommand c = new UpdateObjectCommand(o, name);
+		
+		Message mess = new Message(null, null, c);
+		
+		channel.send(mess);
+	}
+	
+	public void updateLocalObject(IRemotableObject o, String name)
+	{	
 		this.remotableObjects.remove(name);
 		this.remotableObjects.put(name, o);
 	}
@@ -104,17 +124,17 @@ public class RemoteObjectSystem {
 			Class cl = Class.forName(object.getClassName());
 			java.lang.reflect.Constructor co = cl.getConstructor();
 			IRemotableObject remotableObject = (IRemotableObject) co.newInstance();
-			this.addNewRemotableObject( remotableObject, object.getObjectName());
+			addNewRemotableObject( remotableObject, object.getObjectName());
 		}
 		
 		if (c.getIsDeleteObject()) {
 			DeleteObjectCommand object = (DeleteObjectCommand)c;
-			this.delRemotableObject(object.getObjectName());
+			deleteLocalObject(object.getObjectName());
 		}
 		
 		if (c.getIsUpdateObject()) {
 			UpdateObjectCommand object = (UpdateObjectCommand)c;
-			this.updateRemotableObject(object.getObject(), object.getObjectName());
+			updateLocalObject(object.getObject(), object.getObjectName());
 		}
 	}
 

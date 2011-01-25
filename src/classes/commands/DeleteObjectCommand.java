@@ -7,12 +7,10 @@ public class DeleteObjectCommand extends Command{
 	 */
 	private static final long serialVersionUID = 1137173305761692866L;
 	private String objectName;
-	private String className;
 	
-	public DeleteObjectCommand(String object, String className)
+	public DeleteObjectCommand(String object)
 	{
 		this.objectName = object;
-		this.className = className;
 		this.setIsUpdateObject(true);
 	}
 
@@ -23,14 +21,4 @@ public class DeleteObjectCommand extends Command{
 	public void setObjectName(String objectName) {
 		this.objectName = objectName;
 	}
-
-	public String getClassName() {
-		return className;
-	}
-
-	public void setClassName(String className) {
-		this.className = className;
-	}
-
-	
 }

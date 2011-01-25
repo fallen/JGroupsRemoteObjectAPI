@@ -2,6 +2,7 @@ package examples;
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.jgroups.Channel;
 import org.jgroups.ChannelException;
 import org.jgroups.JChannel;
 
@@ -25,19 +26,21 @@ public class ObjectCreation2 {
 		int i;
 		
 		channel.connect("test");
-
+		channel.setOpt(Channel.LOCAL, false);
 		
 		RemoteObjectSystem OSystem = new RemoteObjectSystem("TestSystem", channel);
 		
+		OSystem.getAllRemoteObjects();
+		
 		Thread.sleep(2000);
 		
-		for (i = 0 ; i < 20 ; i++) {
+		for (i = 0 ; i < 30 ; i++) {
 			
 			Character c = (Character)OSystem.getRemoteObject("Toto1");
 			if( c != null)
-			{
-				System.out.println("Character Name : " + c.getName());
-			}
+				System.out.println("[" + Thread.currentThread().getId() + "] Character Name : " + c.getName());
+			else
+				System.out.println("[" + Thread.currentThread().getId() + "] Object Toto1 not found !!");
 				
 			Thread.sleep(500);
 			

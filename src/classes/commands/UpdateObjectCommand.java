@@ -36,6 +36,8 @@ public class UpdateObjectCommand extends Command{
 		this.objectName = objectName;
 	}
 	
-	
+	public String toString() {
+		return "UpdateObject Command on objectName=" + objectName;
+	}
 
 }

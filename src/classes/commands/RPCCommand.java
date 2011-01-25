@@ -35,7 +35,7 @@ public class RPCCommand extends Command {
 	}
 	
 	public String toString() {
-		return "Obj Name : " + objectName + " methodName : " + methodName;
+		return "Remote Procedure Call on objectName=" + objectName + " of methodName=" + methodName;
 	}
 
 	public void setRemoteCallData(RemoteCallData remoteCallData) {

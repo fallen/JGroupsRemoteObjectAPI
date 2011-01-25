@@ -1,9 +1,12 @@
 package classes;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.Vector;
 
+import org.jgroups.Address;
 import org.jgroups.ChannelClosedException;
 import org.jgroups.ChannelNotConnectedException;
 import org.jgroups.JChannel;
@@ -12,6 +15,8 @@ import org.jgroups.Message;
 import classes.commands.Command;
 import classes.commands.CreateObjectCommand;
 import classes.commands.DeleteObjectCommand;
+import classes.commands.GetAllObjectsAnswerCommand;
+import classes.commands.GetAllObjectsCommand;
 import classes.commands.RPCCommand;
 import classes.commands.UpdateObjectCommand;
 
@@ -22,6 +27,8 @@ public class RemoteObjectSystem {
 	private JChannel channel;
 	private String name;
 	private HashMap<String, IRemotableObject> remotableObjects;
+	private Boolean waitingForAnswer = Boolean.valueOf(false);
+	private Long blockedThread = new Long(Thread.currentThread().getId());
 	
 	public RemoteObjectSystem(String systemName, JChannel channel) {
 		this.channel = channel;
@@ -37,7 +44,7 @@ public class RemoteObjectSystem {
 	
 	public HashMap<String, IRemotableObject> getRemotableObjects() 
 	{
-		return this.remotableObjects;
+		return remotableObjects;
 		
 	}
 
@@ -120,12 +127,30 @@ public class RemoteObjectSystem {
 		this.remotableObjects.put(name, o);
 	}
 
-	public void parseCommand(Command c) throws SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, ClassNotFoundException, InstantiationException {
+	public void parseCommand(Command c) throws SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, ClassNotFoundException, InstantiationException, ChannelNotConnectedException, ChannelClosedException {
+		
+		System.out.println("This == " + this);
 		
 		if (c == null)
 			return;
 		
-		if (c.getIsRPC()) {
+		if (c.getIsGetAllObjectsAnswer()) {
+			
+			unBlockThread();
+			GetAllObjectsAnswerCommand co = (GetAllObjectsAnswerCommand)c;
+			remotableObjects = co.getObjects();
+			
+		} else if (c.getIsGetAllObjects()) {
+			
+			GetAllObjectsCommand co = (GetAllObjectsCommand)c;
+			Address replyTo = co.getAddr();
+			
+			GetAllObjectsAnswerCommand answer = new GetAllObjectsAnswerCommand(remotableObjects);
+			
+			Message m = new Message(replyTo, null, answer);
+			channel.send(m);
+			
+		} else if (c.getIsRPC()) {
 			
 			RPCCommand rpc = (RPCCommand)c;
 			CallLocalMethod(rpc.getObjectName(), rpc.getMethodName(), rpc.getRemoteCallData());
@@ -135,7 +160,7 @@ public class RemoteObjectSystem {
 			CreateObjectCommand object = (CreateObjectCommand)c;
 			System.out.println("We are searching for Class : " + object.getClassName());
 			Class<?> cl = Class.forName(object.getClassName());
-			java.lang.reflect.Constructor co = cl.getConstructor();
+			Constructor co = cl.getConstructor();
 			IRemotableObject remotableObject = (IRemotableObject) co.newInstance();
 			addNewRemotableObject( remotableObject, object.getObjectName());
 			
@@ -150,7 +175,56 @@ public class RemoteObjectSystem {
 			updateLocalObject(object.getObject(), object.getObjectName());
 			
 		} else 
-			System.out.println("Error Command unknown !!");
+			System.out.println("[" + Thread.currentThread().getId() + "] Error Command unknown !!");
+	}
+
+	public void getAllRemoteObjects() throws ChannelNotConnectedException, ChannelClosedException {
+		
+		Vector<Address> addresses = channel.getView().getMembers();
+		Address friend = null;
+		Address me = channel.getLocalAddress();
+		int i;
+		
+		if (addresses.size() == 0)
+			return;
+		
+		for (i = 0 ; i < addresses.size() ; i++)
+			if (!addresses.elementAt(i).equals(me))
+				friend = addresses.elementAt(i);
+		
+		if (friend == null)
+			return;
+		
+		GetAllObjectsCommand c = new GetAllObjectsCommand(me);
+		Message m = new Message(friend, null, c);
+		
+		waitingForAnswer = Boolean.valueOf(true);
+		channel.send(m);
+		
+		System.out.println("Avant de bloquer : this == " + this);
+		
+		blockThread();
+		
+
+	}
+	
+	void blockThread() {
+		Long id = Thread.currentThread().getId();
+		System.out.println("["+ id +"] We block this Thread");
+		blockedThread = id;
+		while (waitingForAnswer.booleanValue()) {
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		System.out.println("["+ id +"] We leave the while");
+	}
+	
+	void unBlockThread() {
+		System.out.println("The thread " + Thread.currentThread().getId() + " has unblocked the Thread " + blockedThread);
+		waitingForAnswer = Boolean.valueOf(false);
 	}
 
 }

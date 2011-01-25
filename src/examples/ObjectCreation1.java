@@ -2,6 +2,7 @@ package examples;
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.jgroups.Channel;
 import org.jgroups.ChannelException;
 import org.jgroups.JChannel;
 
@@ -24,6 +25,7 @@ public class ObjectCreation1 {
 		
 		JChannel channel = new JChannel("udp.xml");
 		channel.connect("test");
+		channel.setOpt(Channel.LOCAL, false);
 		
 		RemoteObjectSystem OSystem = new RemoteObjectSystem("TestSystem", channel);
 		
@@ -48,6 +50,10 @@ public class ObjectCreation1 {
 		c.setName("Titi");
 		
 		OSystem.updateRemotableObject( c.getObjectName() );
+		
+		Thread.sleep(2000);
+		
+		OSystem.deleteRemotableObject("Toto1");
 		
 	}
 

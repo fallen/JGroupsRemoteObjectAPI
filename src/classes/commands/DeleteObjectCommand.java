@@ -12,7 +12,7 @@ public class DeleteObjectCommand extends Command{
 	{
 		super();
 		this.objectName = object;
-		this.setIsUpdateObject(true);
+		this.setIsDeleteObject(true);
 	}
 
 	public String getObjectName() {
@@ -21,5 +21,9 @@ public class DeleteObjectCommand extends Command{
 
 	public void setObjectName(String objectName) {
 		this.objectName = objectName;
+	}
+	
+	public String toString() {
+		return "DeleteObject Command on objectName=" + objectName;
 	}
 }

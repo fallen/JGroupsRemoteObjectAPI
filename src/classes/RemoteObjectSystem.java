@@ -33,6 +33,11 @@ public class RemoteObjectSystem {
 		Thread t = new Thread(r);
 		t.start();
 		System.out.println("OK");
+	}
+	
+	public HashMap<String, IRemotableObject> getRemotableObjects() 
+	{
+		return this.remotableObjects;
 		
 	}
 

@@ -5,7 +5,7 @@ import org.jgroups.JChannel;
 
 import classes.RemoteObjectSystem;
 
-public class ObjectCreation1 {
+public class ObjectCreation2 {
 
 	/**
 	 * @param args
@@ -13,31 +13,22 @@ public class ObjectCreation1 {
 	 * @throws InterruptedException 
 	 */
 	public static void main(String[] args) throws ChannelException, InterruptedException {
-		// TODO Auto-generated method stub
 		
 		JChannel channel = new JChannel("udp.xml");
 		channel.connect("test");
 		
 		RemoteObjectSystem OSystem = new RemoteObjectSystem("TestSystem", channel);
 		
-		Thread.sleep(2000);
+		Thread.sleep(5000);
 		
-		Character c = new Character("Toto");
+		Character c = (Character)OSystem.getRemoteObject("Toto1");
 		
-		OSystem.createRemoteObject(c, "Toto1");
+		StringRemoteData srd = new StringRemoteData(null);
 		
-		System.out.println("Character Name : " + c.getName());
+		OSystem.CallRemoteObjectMethod("Toto1", "getName", srd);
 		
-		c.setName("Paul");
-		
-		StringRemoteData srd = new StringRemoteData("Paul2");
-		
-		OSystem.CallRemoteObjectMethod("Toto1", "setName", srd);
-		
-		Character c2 = (Character) OSystem.getRemoteObject("Toto1");
-		
-		
-		
+		System.out.println("Le nom de l'objet Toto1 est : "+c.getName()+" en utilisant la méthode getRemoteObject");
+
 	}
 
 }

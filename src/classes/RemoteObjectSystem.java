@@ -1,5 +1,7 @@
 package classes;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 
 import org.jgroups.JChannel;
@@ -20,13 +22,21 @@ public class RemoteObjectSystem {
 		remotableObjects = new HashMap<String, IRemotableObject>();
 	}
 
-	public void CallRemoteObjectMethod(String remoteObjectName, String methodName, StringRemoteData srd) {
+	public void CallRemoteObjectMethod(String remoteObjectName, String methodName, StringRemoteData srd) throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+		IRemotableObject o = remotableObjects.get(remoteObjectName);
 		
+		// Now we call the method on our local Object
+		Method m = o.getClass().getDeclaredMethod(methodName, StringRemoteData.class);
+		if (m == null) {
+			System.out.println("Error : m == null");
+			return;
+		}
 		
+		m.invoke(srd);
 		
 	}
 
-	public Character getRemoteObject(String string) {
+	public IRemotableObject getRemoteObject(String string) {
 		// TODO Auto-generated method stub
 		return null;
 	}
